@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Login Pelanggan WiFi</h2>
+
+<input id="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwAKAFNaJBynZ8cbL9iztCUom3BnEnLiRnU-W9v3kmjEw8jMhHVhA5P8ybGQ02wJfanvA/exec";
+let currentEmail = "";
+
+function login(){
+  currentEmail = document.getElementById("email").value;
+  var password = document.getElementById("password").value;
+
+  // hapus script lama jika ada
+  var oldScript = document.getElementById("jsonp");
+  if(oldScript) oldScript.remove();
+
+  var script = document.createElement("script");
+  script.id = "jsonp";
+  script.src = API_URL
+    + "?action=login"
+    + "&email=" + encodeURIComponent(currentEmail)
+    + "&password=" + encodeURIComponent(password)
+    + "&callback=handleLogin";
+
+  document.body.appendChild(script);
+}
+
+function handleLogin(data){
+  console.log("LOGIN RESPONSE:", data);
+
+  if(data.status === "success" && data.role === "customer"){
+    window.location.href = "pelanggan-dashboard.html?email=" + encodeURIComponent(currentEmail);
+  } else {
+    alert("Login gagal");
+  }
+}
+</script>
+
+</body>
+</html>
